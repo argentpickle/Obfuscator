@@ -1,0 +1,9 @@
+Obfuscator encodes arbitrary binary data into the case of words drawn
+from a built-in word list.  The first four letters of each word are
+used for encoding; remaining letters in each word, if any, are not
+significant in the encoding.  Words in the word list which are shorter
+than four letters may appear in the output, but are not used in the
+encoding.  The total output is a whitespace-delimited, unpunctuated
+list of words, or a word salad, within which the case of letters
+varies without regard to grammatical standards or common usage norms.
+
