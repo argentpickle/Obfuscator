@@ -10,15 +10,32 @@
 #include "stdafx.h"
 #include "utility.h"
 
-#define WORD_LENGTH		4
+static const _TCHAR * word_list[] = { _T( "dogs" ), _T( "cats" ), _T( "ford" ), _T( "mars" ), 
+										_T( "toys" ), _T( "joys" ), _T( "bird" ), _T( "clam" ) };
 
-static const char * word_list[] = { "nuke", "bomb", "kill", "maim", 
-									"hurt", "plan", "plot" };
+static const int word_count = ( sizeof word_list ) / ( sizeof word_list[0] );
+
 static unsigned int randval;
 
 int init_coder( void )
 {
+	int i;
+
+	/*	make sure the word list exists	*/
 	if ( NULL == word_list ) { return 1; }
+	
+	/*	make sure the word list has elements	*/
+	if ( 0 == word_count ) { return 1; }
+
+	/*	make sure at least one word in the word list has at least four letters	*/
+	for ( i = 0; i < word_count; i++ )
+	{
+		if ( 4 <= _tcslen( word_list[i] ) )
+		{
+			break;
+		}
+	}
+	if ( i >= word_count ) { return 1; }
 
 	/*	make sure the random number generator is working	*/
 	if ( 0 != rand_s( &randval ) ) { return 1; }
@@ -26,65 +43,70 @@ int init_coder( void )
 	return 0;
 }
 
-void _get_word( char word[] )
+static void _get_word( _TCHAR ** p_word )
 {
-	int index;
+	int index, len;
 
 	/*	assign an index value into wordlist.  this operation must succeed. */
-	index = ( 0 == rand_s( &randval ) ) ? (int)((double)randval * 7.0 / (double)UINT_MAX) : 0 ;
-	strcpy_s( word, WORD_LENGTH, word_list[index] );
+	index = ( 0 == rand_s( &randval ) ) ? (int)((double)randval * (double)word_count / (double)UINT_MAX) : 0 ;
+	len = _tcslen( word_list[index] ) + 1;
+	len *= sizeof( _TCHAR );
+	*p_word = (char *)malloc( len );
+	_tcscpy_s( *p_word, len, word_list[index] );
 }
 
-int _get_word_for_nibble( unsigned char nibble, char out[] )
+static int _get_word_for_nibble( unsigned char nibble, _TCHAR ** p_out )
 {
 	/*	sanity check	*/
 	if ( 0 != (0xF0 & nibble) ) { return 1; }
 
-	/*	get random word from wordlist	*/
-	_get_word( out );
+	/*	get random lowercase word from wordlist	*/
+	_get_word( p_out );
 
-	/*	set case of letters in nibble according to bit values in the high nibble of *p_data */
-	/*	where data bits are 1, clear the corresponding 0x20 bit in the character to cast the character to upper-case	*/
+	/*	capitalize letters in nibble according to bit values in the high nibble of *p_data */
 	if ( nibble & 0x08 )
 	{
-		out[0] &= 0xe0;
+		(*p_out)[0] = _totupper( (*p_out)[0] );
 	}
 	if ( nibble & 0x04 )
 	{
-		out[1] &= 0xe0;
+		(*p_out)[1] = _totupper( (*p_out)[1] );
 	}
 	if ( nibble & 0x02 )
 	{
-		out[2] &= 0xe0;
+		(*p_out)[2] = _totupper( (*p_out)[2] );
 	}
 	if ( nibble & 0x01 )
 	{
-		out[3] &= 0xe0;
+		(*p_out)[3] = _totupper( (*p_out)[3] );
 	}
 
 	return 0;
 }
 
-int get_code_for_byte( unsigned char * const p_data, char output[] )
+int get_code_for_byte( unsigned char * const p_data, _TCHAR ** p_outstr )
 {
-	char nibble_code[2][WORD_LENGTH];
+	_TCHAR * nibble_code[2];
 	unsigned char nibble_data;
+	int ilen = 0, mag = 0, checklen = 0;
 
 	/*	sanity check	*/
-	if ( NULL == p_data || NULL == output ) { return 1; }
+	if ( NULL == p_data || NULL == p_outstr ) { return 1; }
 
 	/*	do high nibble	*/
 	nibble_data = (*p_data & 0xF0) >> 4;
-	_get_word_for_nibble( nibble_data, nibble_code[0] );
+	_get_word_for_nibble( nibble_data, &nibble_code[0] );
 	/*	do low nibble	*/
 	nibble_data = *p_data & 0x0F;
-	_get_word_for_nibble( nibble_data, nibble_code[1] );
+	_get_word_for_nibble( nibble_data, &nibble_code[1] );
 
 	/*	build return value	*/
-	memcpy( &(output[0]), nibble_code[0], WORD_LENGTH );
-	output[4] = ' ';
-	memcpy( &(output[5]), nibble_code[1], WORD_LENGTH );
-	output[9] = ' ';
+	ilen = _tcslen( nibble_code[0] ) + _tcslen( nibble_code[1] ) + 3;	/*	spaces and trailing null	*/
+	mag = ilen * sizeof( _TCHAR );										/*	expansion for character size	*/
+	mag += 4;															/*	padding	*/
+	*p_outstr = (_TCHAR *)malloc( mag + 2 );							/*	more padding	*/
+	if ( NULL == *p_outstr ) { return 1; }
+	checklen = _stprintf_s( *p_outstr, ilen, _T( "%s %s " ), nibble_code[0], nibble_code[1] );
 
 	return 0;
 }

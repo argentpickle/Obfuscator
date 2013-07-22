@@ -22,7 +22,7 @@ int encode( _TCHAR * pFilename )
 	long filelen = 0;
 	size_t count = 0;
 	unsigned long crc = 0;
-	char outbuf[12];
+	_TCHAR * outstr = NULL;
 	int i = 0;
 	long l = 0;
 
@@ -31,7 +31,7 @@ int encode( _TCHAR * pFilename )
 	if ( 0 != retval ) { goto error; }
 
 	/*	extract length and binary content of file	*/
-	err = fopen_s( &p_input, (char *)pFilename, "rbR" );
+	err = _tfopen_s( &p_input, pFilename, _T( "rbR" ) );
 	if ( 0 != err ) { retval = err; goto error; }
 	retval = fseek( p_input, 0, SEEK_END );
 	if ( 0 != retval ) { goto error; }
@@ -57,22 +57,22 @@ int encode( _TCHAR * pFilename )
 	retval = init_coder();
 
 	/*	encode header, dump to stdout	*/
-	outbuf[11] = outbuf[10] = '\0';
 	for ( i = 0; i < sizeof( encoding_header ); i++ )
 	{
-		get_code_for_byte( ((unsigned char *)p_header) + i, outbuf );
-		_ftprintf_s( stdout, _T( "%s" ), outbuf );
+		get_code_for_byte( ((unsigned char *)p_header) + i, &outstr );
+		_ftprintf_s( stdout, _T( "%s" ), outstr );
+		free( outstr );
 	}
 	/*	free header buffer	*/
 	free( p_header );
 	p_header = NULL;
 
 	/*	encode content buffer, dump to stdout	*/
-	outbuf[11] = outbuf[10] = '\0';
 	for ( l = 0; l < filelen; l++ )
 	{
-		get_code_for_byte( p_contents + l, outbuf );
-		_ftprintf_s( stdout, _T( "%s" ), outbuf );
+		get_code_for_byte( p_contents + l, &outstr );
+		_ftprintf_s( stdout, _T( "%s" ), outstr );
+		free( outstr );
 	}
 	/*	free contents buffer	*/
 	free( p_contents );
