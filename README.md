@@ -16,5 +16,5 @@ method resulting in whitespace-delimited words containing at least
 four characters capable of case variation to carry the obfuscated
 data.
 
-[File Format Description](doc/FileFormat.txt)
+[File Format Description](doc/FileFormat.md)
 
