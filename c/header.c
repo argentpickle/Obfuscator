@@ -27,9 +27,10 @@ int get_header( encoding_header ** pp_header )
 	if ( NULL == pp_header ) { return 1; }
 
 	/*	standard initialization for this version of the implementation	*/
+	/*	file format version 01.01: CRC contained in header	*/
 	headstruct.leader[0] = 'L';
 	headstruct.leader[1] = 'N';
-	headstruct.major = 0;
+	headstruct.major = 1;
 	headstruct.minor = 1;
 	headstruct.reserved[0] = '\0';
 	headstruct.reserved[1] = '\0';

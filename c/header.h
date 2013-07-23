@@ -16,10 +16,10 @@
 **	1		the ASCII character N
 **	2		the major version number of the encoding. For this format, set to zero.
 **	3		the minor version number of the encoding. For this format, set to one.
-**	4		reserved; set to null
-**	5		reserved; set to null
-**	6		reserved; set to null
-**	7		reserved; set to null
+**	4		reserved; set to zero
+**	5		reserved; set to zero
+**	6		reserved; set to zero
+**	7		reserved; set to zero
 **	8		LSB of length of content following header
 **	9		next byte of length of content following header
 **	10		next byte of length of content following header
