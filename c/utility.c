@@ -60,10 +60,15 @@ static int _get_word_for_nibble( unsigned char nibble, _TCHAR ** p_out )
 	/*	sanity check	*/
 	if ( 0 != (0xF0 & nibble) ) { return 1; }
 
-	/*	get random lowercase word from wordlist	*/
+	/*	get random word from wordlist	*/
 	_get_word( p_out );
 
 	/*	capitalize letters in nibble according to bit values in the high nibble of *p_data */
+	(*p_out)[0] = ( nibble & 0x08 ) ? _totupper( (*p_out)[0] ) : _totlower( (*p_out)[0] ) ;
+	(*p_out)[1] = ( nibble & 0x04 ) ? _totupper( (*p_out)[1] ) : _totlower( (*p_out)[1] ) ;
+	(*p_out)[2] = ( nibble & 0x02 ) ? _totupper( (*p_out)[2] ) : _totlower( (*p_out)[2] ) ;
+	(*p_out)[3] = ( nibble & 0x01 ) ? _totupper( (*p_out)[3] ) : _totlower( (*p_out)[3] ) ;
+/*
 	if ( nibble & 0x08 )
 	{
 		(*p_out)[0] = _totupper( (*p_out)[0] );
@@ -80,6 +85,7 @@ static int _get_word_for_nibble( unsigned char nibble, _TCHAR ** p_out )
 	{
 		(*p_out)[3] = _totupper( (*p_out)[3] );
 	}
+*/
 
 	return 0;
 }

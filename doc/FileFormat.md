@@ -54,15 +54,15 @@ Multiple versions of the Obfuscator file format exist, which vary each
 from the other in what metadata are stored and where that metadata is
 located.  Specific details of various versions follow below. 
 
-[Version 01.01: CRC in header](01_01.txt)
+[Version 01.01: CRC in header](01_01.md)
 
-[Version 01.02: MD5 in header](01_02.txt)
+[Version 01.02: MD5 in header](01_02.md)
 
-[Version 01.03: SHA-2 in header](01_03.txt)
+[Version 01.03: SHA-2 in header](01_03.md)
 
-[Version 02.01: CRC follows content](02_01.txt)
+[Version 02.01: CRC follows content](02_01.md)
 
-[Version 02.02: MD5 follows content](02_02.txt)
+[Version 02.02: MD5 follows content](02_02.md)
 
-[Version 02.03: SHA-2 follows content](02_03.txt)
+[Version 02.03: SHA-2 follows content](02_03.md)
 

@@ -19,9 +19,9 @@
 **	that header with values appropriate to this implementation.
 */
 
-int get_header( encoding_header ** pp_header )
+int get_header_01_01( encoding_header_01_01 ** pp_header )
 {
-	encoding_header headstruct;
+	encoding_header_01_01 headstruct;
 
 	/*	sanity check the parameter	*/
 	if ( NULL == pp_header ) { return 1; }
@@ -40,9 +40,9 @@ int get_header( encoding_header ** pp_header )
 	headstruct.length = 0;
 
 	//	set return value 
-	*pp_header = (encoding_header *)malloc( sizeof( encoding_header ) );
+	*pp_header = (encoding_header_01_01 *)malloc( sizeof( encoding_header_01_01 ) );
 	if ( NULL == *pp_header ) { return 1; }
 
-	memcpy( *pp_header, &headstruct, sizeof( encoding_header ) );
+	memcpy( *pp_header, &headstruct, sizeof( encoding_header_01_01 ) );
 	return 0;
 }

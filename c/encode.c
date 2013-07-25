@@ -14,7 +14,7 @@
 
 int encode( _TCHAR * pFilename )
 {
-	encoding_header * p_header = NULL;
+	encoding_header_01_01 * p_header = NULL;
 	FILE * p_input = NULL;
 	unsigned char * p_contents = NULL;
 	int retval = 0;
@@ -27,7 +27,7 @@ int encode( _TCHAR * pFilename )
 	long l = 0;
 
 	/*	get standard header */
-	retval = get_header( &p_header );
+	retval = get_header_01_01( &p_header );
 	if ( 0 != retval ) { goto error; }
 
 	/*	extract length and binary content of file	*/
@@ -57,7 +57,7 @@ int encode( _TCHAR * pFilename )
 	retval = init_coder();
 
 	/*	encode header, dump to stdout	*/
-	for ( i = 0; i < sizeof( encoding_header ); i++ )
+	for ( i = 0; i < sizeof( encoding_header_01_01 ); i++ )
 	{
 		get_code_for_byte( ((unsigned char *)p_header) + i, &outstr );
 		_ftprintf_s( stdout, _T( "%s" ), outstr );
