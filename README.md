@@ -16,5 +16,12 @@ method resulting in whitespace-delimited words containing at least
 four characters capable of case variation to carry the obfuscated
 data.
 
+The technique of disguising a message within seemingly random
+variations or garbage areas of another message is properly referred to
+as [steganography](https://en.wikipedia.org/wiki/Steganography).  When
+an otherwise reasonable text document is used as the base text for
+encoding a message via case variation, this technique may be
+considered a form of steganography.
+
 [File Format Description](doc/FileFormat.md)
 
